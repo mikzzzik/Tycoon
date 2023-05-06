@@ -9,22 +9,43 @@ public class BuildingPanelUI : MonoBehaviour
     [SerializeField] private GameObject _agreeButton;
 
     [SerializeField] private BuildingController _buildingController;
+   
+    [SerializeField] private BuildingContainer _mainBuildingContainer;
 
-    public static Action OnShow;
-    public static Action OnHide;
+    private BuildingContainer _nowBuildingContainer;
 
     public void Show()
     {
         if (_buildingPanelGameObject.activeSelf)
         {
             Hide();
+
             return;
+        }
+
+        if(_nowBuildingContainer == null && _mainBuildingContainer != null)
+        {
+            _mainBuildingContainer.gameObject.SetActive(true);
+
+            _nowBuildingContainer = _mainBuildingContainer;
         }
 
         _buildingController.CheckBuilding();
         _buildingPanelGameObject.SetActive(true);
         
         TouchController.OnSetMoveStatus(false);
+    }
+
+    public void ShowBuildingContent(BuildingContainer container)
+    {
+        if (_nowBuildingContainer != null)
+        {
+            _nowBuildingContainer.gameObject.SetActive(false);
+
+        }
+
+        _nowBuildingContainer = container;
+        _nowBuildingContainer.gameObject.SetActive(true);
     }
 
     public void Hide()

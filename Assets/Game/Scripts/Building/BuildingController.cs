@@ -39,6 +39,7 @@ public class BuildingController : MonoBehaviour
 
     private void ChooseBuilding(BuildingPlace building)
     {
+        Debug.Log(building);
         _tilemapGameObject.SetActive(true);
         _nowBuilding = Instantiate(building);
 

@@ -2900,6 +2900,7 @@ GameObject:
   - component: {fileID: 1957687146716210196}
   - component: {fileID: 4681517306656406793}
   - component: {fileID: 1552613199519545014}
+  - component: {fileID: 329965702639251423}
   m_Layer: 11
   m_Name: Sawmill
   m_TagString: Untagged
@@ -2952,8 +2953,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 9, y: 2.5, z: 9}
-  m_Center: {x: 0, y: 1.25, z: 0}
+  m_Size: {x: 9, y: 4, z: 9}
+  m_Center: {x: 0, y: 2, z: 0}
 --- !u!114 &1552613199519545014
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2969,9 +2970,26 @@ MonoBehaviour:
   _collider: {fileID: 4681517306656406793}
   _healthText: {fileID: 2686383098336295107}
   _buildingScriptableObject: {fileID: 11400000, guid: dca292005f2e3bf41858ed2cee63ae79, type: 2}
+  _attackPointList: []
   _resourceGenerateList:
   - _type: 0
     _amount: 2
+--- !u!208 &329965702639251423
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6179201560809569550}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 4.5, y: 1.25, z: 4.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 1.25, z: 0}
+  m_TimeToStationary: 0.3
 --- !u!1 &6180671461801750496
 GameObject:
   m_ObjectHideFlags: 0

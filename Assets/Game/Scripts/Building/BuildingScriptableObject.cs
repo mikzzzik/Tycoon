@@ -3,11 +3,22 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Building", menuName = "Building/Building", order = 0)]
 public class BuildingScriptableObject : ScriptableObject
 {
+    [SerializeField] private string _name;
+    [SerializeField] private Sprite _icon;
     [SerializeField] private Resource[] _needResource;
+
     [SerializeField] private Building _building;
+    [SerializeField] private BuildingPlace _buildingPlace;
+
     [SerializeField] private Parameter _parameter;
 
-    public Building Building { get { return _building; } } 
+    public string Name { get { return _name; } }
+    public Sprite Icon { get { return _icon; } }
+
+    public Building Building { get { return _building; } }
+
+    public BuildingPlace BuildingPlace { get { return _buildingPlace; } }
+
     public Resource[] NeedResource { get { return _needResource; } }
     public Parameter Parameter { get { return _parameter; } }
 }

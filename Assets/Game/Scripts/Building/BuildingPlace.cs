@@ -7,11 +7,19 @@ public class BuildingPlace : MonoBehaviour
     [SerializeField] private BuildingScriptableObject _buildingScriptableObject;
     [SerializeField] private Collider _collider;
 
+    [SerializeField] private List<Collision> _collisionOnCollider = new List<Collision>();
+
     private bool _isDrag;
 
     public Resource[] NeedResource { get { return _buildingScriptableObject.NeedResource; } }
-    private void Start()
+    private IEnumerator Start()
     {
+
+        for (int i = 0; i < 4; i++)
+        {
+            yield return new WaitForEndOfFrame();
+        }
+
         _isDrag = false;
         GridController.OnSelectGrids(transform.position, _collider.bounds.size, this);
     }
@@ -27,6 +35,7 @@ public class BuildingPlace : MonoBehaviour
     }
     private void Update()
     {
+        Debug.Log(_collisionOnCollider.Count);
         Debug.DrawRay(transform.position + new Vector3(-_collider.bounds.size.x / 2, 2, -_collider.bounds.size.z / 2), transform.TransformDirection(Vector3.right) * _collider.bounds.size.x);
         Debug.DrawRay(transform.position + new Vector3(-_collider.bounds.size.x / 2, 2, _collider.bounds.size.z / 2), transform.TransformDirection(Vector3.right) * _collider.bounds.size.x);
         Debug.DrawRay(transform.position + new Vector3(-_collider.bounds.size.x / 2, 2, -_collider.bounds.size.z / 2), transform.TransformDirection(Vector3.forward) * _collider.bounds.size.z);
@@ -37,8 +46,11 @@ public class BuildingPlace : MonoBehaviour
 
     public bool CanPlace()
     {
+        Debug.Log(_collisionOnCollider.Count);
+        if (_collisionOnCollider.Count > 0) return false;
+        else return true;
 
-        RaycastHit hit;
+        /*RaycastHit hit;
         if (Physics.Raycast(transform.position + new Vector3(-_collider.bounds.size.x / 2, 2, -_collider.bounds.size.z / 2), transform.TransformDirection(Vector3.right), out hit, _collider.bounds.size.x, ~(1 << 7)))
         {
             return false;
@@ -63,20 +75,35 @@ public class BuildingPlace : MonoBehaviour
         {
             return false;
         }
-        return true;
+        return true;*/
     } 
     private void Clear()
     {
         Destroy(gameObject);
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        _collisionOnCollider.Add(collision);
+        Debug.Log("Enter:" + collision.transform);
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        _collisionOnCollider.Remove(collision);
+        Debug.Log("Exit:" + collision.transform);
+    }
+
     public void Place()
     {
+        if (!CanPlace()) return;
+
         Building building = Instantiate(_buildingScriptableObject.Building, transform.position, transform.rotation) as Building;
         building.SetParameter(_buildingScriptableObject.Parameter);
         GridController.OnPlaceBuilding(transform.position, _collider.bounds.size);
         Destroy(gameObject);
     }
+
 
     private void OnMouseDrag()
     {

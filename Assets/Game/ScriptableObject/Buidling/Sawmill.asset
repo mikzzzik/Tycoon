@@ -12,11 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78fb2e4b76bbd874d8424bac7168c3b3, type: 3}
   m_Name: Sawmill
   m_EditorClassIdentifier: 
+  _name: Sawmill
+  _icon: {fileID: 21300000, guid: fd954c6aa6c9522469b9f154b9da2a62, type: 3}
   _needResource:
   - _type: 2
     _amount: 100
   - _type: 0
-    _amount: 100
+    _amount: 150
   _building: {fileID: 1552613199519545014, guid: 4638ae1903b4a61469fad15f6a72130d, type: 3}
-  _pamameter:
-    _maxHealthPoint: 100
+  _buildingPlace: {fileID: 455291630407858139, guid: 389ff025a990d9b46a737460b559e58d, type: 3}
+  _parameter:
+    _maxHealthPoint: 200
+    _attackOrder: 0

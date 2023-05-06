@@ -20,27 +20,48 @@ public class Building : MonoBehaviour
     {
         SetParameter(_buildingScriptableObject.Parameter);
     }
-    public Vector3 GetPoint(Vector3 position)
+    public AttackPoint GetPoint(Vector3 position)
     {
 
         NavMeshPath path = new NavMeshPath();
 
+        int index = -1;
+        float distance = 1000;
+
         for (int i = 0; i < _attackPointList.Count; i++)
         {
-            if (_attackPointList[i].IsFree)
+         
+            NavMesh.CalculatePath(position, _attackPointList[i].Position, NavMesh.AllAreas, path);
+           // Debug.Log(path.status);
+            if (_attackPointList[i].IsFree && path.status == NavMeshPathStatus.PathComplete) 
             {
-                _attackPointList[i].IsFree = false;
+                float tempDistance = 0;
 
-                NavMesh.CalculatePath(position, _attackPointList[i].Position, NavMesh.AllAreas, path);
-                Debug.Log(path.status);
-                Debug.Log(_attackPointList[i]);
+                for (int j = 1; j < path.corners.Length; j++)
+                {
+                    tempDistance += Vector3.Distance(path.corners[j-1], path.corners[j]);
+                }
 
-                return _attackPointList[i].Position;
+             //   Debug.Log(tempDistance + " " + distance);
 
+                if (tempDistance < distance)
+                {
+                    distance = tempDistance;
+                    index = i;
+
+                }
             }
         }
 
-        return Vector3.zero;
+        //Debug.Log(index);
+        if (index != -1)
+        {
+            _attackPointList[index].IsFree = false;
+
+            return _attackPointList[index];
+        }
+
+        return null;
     }
 
     public void Hit(int damage)
@@ -78,7 +99,7 @@ public class Building : MonoBehaviour
 public class AttackPoint
 {
     [SerializeField] private Transform _transformPosition;
-    [SerializeField] private bool _isFree;
+    [SerializeField] private bool _isFree = true;
 
     public Vector3 Position {  get { return _transformPosition.position; } }
     public bool IsFree { get { return _isFree; }  set { _isFree = value; } }

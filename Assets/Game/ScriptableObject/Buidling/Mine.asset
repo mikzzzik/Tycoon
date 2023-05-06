@@ -12,11 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78fb2e4b76bbd874d8424bac7168c3b3, type: 3}
   m_Name: Mine
   m_EditorClassIdentifier: 
+  _name: Mine
+  _icon: {fileID: 21300000, guid: 8d9833b3074d69c4caa314273a397b2b, type: 3}
   _needResource:
   - _type: 2
     _amount: 100
   - _type: 0
-    _amount: 100
+    _amount: 150
   _building: {fileID: 7422483113525616861, guid: eb18fc97d1cd3ac4093766897333c46e, type: 3}
-  _pamameter:
-    _maxHealthPoint: 100
+  _buildingPlace: {fileID: 6994796240272222936, guid: 024ec2fc15e9ade4fb22aaf01381f8d4, type: 3}
+  _parameter:
+    _maxHealthPoint: 200
+    _attackOrder: 0

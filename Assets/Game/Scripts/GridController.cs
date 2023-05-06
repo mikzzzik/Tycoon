@@ -24,7 +24,6 @@ public class GridController : MonoBehaviour
     [SerializeField] private Material _buildingMaterial;
     [SerializeField] private BuildingPanelUI _buildingPanelUI;
     [SerializeField] private ResourceController _resourceController;
-    
 
     private bool _canPlace;
 
@@ -93,13 +92,13 @@ public class GridController : MonoBehaviour
         int height = Mathf.CeilToInt(bounds.z / 2);
         int wight = Mathf.CeilToInt(bounds.x / 2);
 
-        Debug.Log($"Height: {height}");
-        Debug.Log($"Wight: {wight}");
+   //     Debug.Log($"Height: {height}");
+  //      Debug.Log($"Wight: {wight}");
 
         if (buildingPlace.CanPlace() && _resourceController.EnoughtResource(buildingPlace.NeedResource))
         {
             _canPlace = true;
-            Debug.Log("Have resource");
+       //     Debug.Log("Have resource");
             for (int i = -wight; i < wight; i++)
             {
                 for (int j = -height; j < height; j++)
@@ -145,6 +144,7 @@ public class GridController : MonoBehaviour
 
     private void PlaceBuilding(Vector3 position, Vector3 bounds)
     {
+        _buildingPanelUI.ChangeAgreeButtonStatus(false);
         int height = Mathf.CeilToInt(bounds.z / 2);
         int wight = Mathf.CeilToInt(bounds.x / 2);
         while (_grid.Count > 0)

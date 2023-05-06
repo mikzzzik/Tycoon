@@ -12,12 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78fb2e4b76bbd874d8424bac7168c3b3, type: 3}
   m_Name: Tower
   m_EditorClassIdentifier: 
+  _name: Tower
+  _icon: {fileID: 21300000, guid: 9eabce61bf797d2479de51950a3aaed6, type: 3}
   _needResource:
   - _type: 0
     _amount: 150
   - _type: 1
     _amount: 150
   _building: {fileID: 8987677328972414955, guid: df7a7bf73ab6df742ae8c134ea0448be, type: 3}
+  _buildingPlace: {fileID: 4813978612844733707, guid: e8f5827bf8cd0fa4faa2db316c1a0d6d, type: 3}
   _parameter:
-    _maxHealthPoint: 250
+    _maxHealthPoint: 400
     _attackOrder: 10

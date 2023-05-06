@@ -15,4 +15,5 @@ MonoBehaviour:
   _needResource: []
   _building: {fileID: 8987677328972414955, guid: df7a7bf73ab6df742ae8c134ea0448be, type: 3}
   _parameter:
-    _maxHealthPoint: 1000
+    _maxHealthPoint: 1500
+    _attackOrder: 0

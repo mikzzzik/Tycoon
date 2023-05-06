@@ -7,7 +7,7 @@ using TMPro;
 public class Enemy : MonoBehaviour
 {
     [SerializeField] private NavMeshAgent _agent;
-    [SerializeField] private NavMeshObstacle _navMeshObtacle;
+
     [SerializeField] private Building _townHall;
 
     [SerializeField] private Building _nowTarget;
@@ -22,13 +22,17 @@ public class Enemy : MonoBehaviour
 
     [SerializeField] private float _rotateSpeed = 0.25f;
 
-    [SerializeField] private Vector3 _position;
+    [SerializeField] private AttackPoint _attackPoint;
+
+    [SerializeField] private float _remainingDistance = 0.3f;
 
     private int _healthPoint = 0;
 
     private bool _rotated;
 
     private Coroutine _movingCoroutine;
+
+    int temp = 0;
 
     public void Init(Building townHall)
     {
@@ -42,11 +46,10 @@ public class Enemy : MonoBehaviour
 
     private void Start()
     {
-        _navMeshObtacle.enabled = false;
         _agent.enabled = true;
 
         Init(_townHall);
-        
+        Debug.Log(2);
         TryGetNewTarget();
     }
 
@@ -56,7 +59,7 @@ public class Enemy : MonoBehaviour
         yield return new WaitForEndOfFrame();
         _rotated = false;
         _agent.isStopped = false;
-        _agent.SetDestination(_position);
+        _agent.SetDestination(_attackPoint.Position);
 
         yield return new WaitUntil(() => _agent.hasPath);
 
@@ -84,13 +87,14 @@ public class Enemy : MonoBehaviour
 
     private void Death()
     {
+        _attackPoint.IsFree = true;
         Destroy(gameObject);
     }
 
     private IEnumerator Attack()
     {
         _nowTarget.Hit(_parameter.AttackDamage);
-        Debug.Log("Attack");
+   //     Debug.Log("Attack");
         yield return new WaitForSeconds(_parameter.AttackDelay);
 
         if(_attack) StartCoroutine(Attack());
@@ -100,11 +104,11 @@ public class Enemy : MonoBehaviour
     {
         RaycastHit hit;
        
-        Debug.DrawRay(transform.position + Vector3.up * 1, transform.TransformDirection(Vector3.forward) * 0.8f);
+        Debug.DrawRay(transform.position + Vector3.up * 1, transform.TransformDirection(Vector3.forward) * 0.75f);
            
-        if (Physics.Raycast(transform.position + Vector3.up * 1, transform.TransformDirection(Vector3.forward), out hit, 1f, ~(1 << 8)))
+        if (Physics.Raycast(transform.position + Vector3.up * 1, transform.TransformDirection(Vector3.forward), out hit, 2f, ~(1 << 8)))
         {
-            if (hit.distance > 0.8 || _attack) return;
+            if (hit.distance > 0.75f || _attack || _agent.remainingDistance > _remainingDistance) return;
 
             _attack = true;
             _agent.isStopped = true;
@@ -126,27 +130,33 @@ public class Enemy : MonoBehaviour
      
             _attack = false;
 
+            Debug.Log(1);
             TryGetNewTarget();
         }
     }
 
     private void FixedUpdate()
     {
-        Debug.Log(_agent.remainingDistance);
+      //  Debug.Log(name + " " + _agent.remainingDistance);
 
-        if(_agent.remainingDistance < 0.2f && !_rotated)
+        if(_agent.remainingDistance < _remainingDistance && !_rotated)
         {
             _rotated = true;
 
             StartCoroutine(LookAt());
         }
-        if (!_nowTarget.gameObject.activeSelf)
+        if (_nowTarget != null)
         {
-            _buildingTargetList.Remove(_nowTarget);
-            _nowTarget = null;
-
-            TryGetNewTarget();
+            if (!_nowTarget.gameObject.activeSelf)
+            {
+                _buildingTargetList.Remove(_nowTarget);
+                _nowTarget = null;
+                Debug.Log(3);
+                TryGetNewTarget();
+            }
         }
+        if(!_attack)
+            StartCoroutine(LookAt());
     }
 
     private IEnumerator LookAt()
@@ -167,6 +177,14 @@ public class Enemy : MonoBehaviour
 
     private void TryGetNewTarget()
     {
+        Debug.Log("Try get new target");
+        if (_attackPoint != null)
+        {
+            _attackPoint.IsFree = true;
+            _attackPoint = null;
+        }
+
+        if (temp == 2) return;
         if (_buildingTargetList.Count <= 0)
         {
             _nowTarget = _townHall;
@@ -193,8 +211,18 @@ public class Enemy : MonoBehaviour
             _nowTarget = _buildingTargetList[index];
         }
 
-        _position = _nowTarget.GetPoint(transform.position);
+        _attackPoint = _nowTarget.GetPoint(transform.position);
         
+        if(_attackPoint == null)
+        {
+            temp++;
+            _buildingTargetList.Remove(_nowTarget);
+            Debug.Log(4);
+            TryGetNewTarget();
+
+            return;
+        }
+
         Move();
     }
 
@@ -213,14 +241,15 @@ public class Enemy : MonoBehaviour
         Building building;
         if (other.TryGetComponent(out building))
         {
+            Debug.Log(building);
             if (other.tag != "TownHall")
             {
                 _buildingTargetList.Add(building);
-
+                Debug.Log("Buidling list:" + _buildingTargetList.Count);
                 if (_nowTarget == null || _nowTarget == _townHall) 
                 {
                     _nowTarget = _buildingTargetList[0];
-
+                    Debug.Log(5);
                     TryGetNewTarget();
                 } 
             }
@@ -237,7 +266,7 @@ public class Enemy : MonoBehaviour
             if (_nowTarget == building) _nowTarget = null;
 
             _buildingTargetList.Remove(building);
-
+            Debug.Log(6);
             TryGetNewTarget();
         }
     }
