@@ -6,33 +6,31 @@ using TMPro;
 
 public class Enemy : MonoBehaviour
 {
+    [SerializeField] private Animator _animator;
+
     [SerializeField] private NavMeshAgent _agent;
-
-    [SerializeField] private Building _townHall;
-
-    [SerializeField] private Building _nowTarget;
-
-    [SerializeField] private bool _attack;
-
-    [SerializeField] private List<Building> _buildingTargetList = new List<Building>();
 
     [SerializeField] protected TextMeshPro _healthText;
 
     [SerializeField] private EnemyParameterScriptableObject _parameter;
 
     [SerializeField] private float _rotateSpeed = 0.25f;
-
-    [SerializeField] private AttackPoint _attackPoint;
-
     [SerializeField] private float _remainingDistance = 0.3f;
 
+    [SerializeField] private Building _townHall;
+    [SerializeField] private Building _nowTarget;
+
+    private List<Building> _buildingTargetList = new List<Building>();
+    private AttackPoint _attackPoint;
+
     private int _healthPoint = 0;
+    private int temp = 0;
 
     private bool _rotated;
+    private bool _attack;
 
     private Coroutine _movingCoroutine;
 
-    int temp = 0;
 
     public void Init(Building townHall)
     {
@@ -43,6 +41,10 @@ public class Enemy : MonoBehaviour
         _healthText.text = _healthPoint.ToString();
     }
 
+    public void EndAttack()
+    {
+
+    }
 
     private void Start()
     {
